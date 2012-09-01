@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Fotos</title>
+    <meta name="viewport" content="width=device-width">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+<!--[if lt IE 9]>
+<script src="assets/html5shiv.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+<script src="js/libs/html5-3.4-respond-1.1.0.min.js"></script>
+<![endif]-->
+
+<script>
+var IMGUR_API_KEY = '8a3f94c3ad388e5619dc949e094eba9f';
+var pl;
+</script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+<script>
+typeof jQuery != 'undefined' || document.write(unescape("%3Cscript src='jquery.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script src="fotos.js"></script>
+
+<script>
+window.onload = function () {
+    $('#photo-upload-trigger').click(function(e){
+        $('#photo-upload').click();
+    });
+
+    pl = new PhotoList('#photolist');
+
+    // IMAGE UPLOAD
+    var imageUpload = document.getElementById('photo-upload');
+
+    imageUpload.onchange = function (event) {
+        var files = event.target.files,
+            file;
+
+        if (files && files.length > 0) {
+            file = files[0];
+
+            var p = new Photo(file);
+            var index = pl.add(p);
+        }
+    }
+}
+
+</script>
+
+</head>
+<body>
+
+<header class="clearfix">
+    <nav>
+        <ul>
+            <li>
+                <a href="#">Φotos</a>
+            </li>
+            <li>
+                <input type="file" class="trickbrowserhidden" id="photo-upload" accept="image/*" tabindex="-1">
+                <input type="button" class="but is-good" id="photo-upload-trigger" name="new" value="New Photo">
+            </li>
+            <li id="gallery-info">
+                <input type="button" class="but is-good" id="load-gallery-trigger" name="new" value="Load Gallery">
+            </li>
+            <li>
+                <meter id="space" value="0" min="0" title="Space used"></meter>
+            </li>
+        </ul>
+    </nav>
+</header>
+
+<section id="item-list">
+    <div class="photolist" id="photolist">
+        <article id="intro">
+            <h1>Welcome to Φotos</h1>
+            <p>
+                Here you can add "New Photos" and "Upload" them to the cloud (thanks to <a href="http://imgur.com">imgur.com</a>) and manage them from any device you chose without hassle.<br/><br/>
+                After you add and upload your first photo a 4 letter/digit code will appear on the navigation.<br/><br/>You can use that code to load your gallery on other device and then take even more photos!<br/><br/>Enjoy<br/>-Sev<br/><br/><br/>Notes:<br/>The meter on the top left is the space used on the browser for images (mostly thumbs)
+            </p>
+        </article>
+    </div>
+</section>
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-20325938-3']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+<!-- /Google Analytics -->
+</body>
+</html>
