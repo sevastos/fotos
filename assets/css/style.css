@@ -78,7 +78,7 @@ body{ font:16px/26px Helvetica, Helvetica Neue, Arial; }
 }
 
 header nav{
-    background: #eee url('assets/extra_clean_paper.png') repeat top left;
+    background: #eee url('assets/img/extra_clean_paper.png') repeat top left;
     box-shadow: 0 0px 7px #777;
     border-bottom: 1px solid #ccc;
 }
@@ -89,11 +89,11 @@ header nav{
     (min-device-pixel-ratio: 1.5) {
 
   header nav{
-      background-image: url('assets/redox_01_@2X.png');
+      background-image: url('assets/img/redox_01_@2X.png');
   }
 
   body {
-    background: url('assets/redox_01_@2X.png') repeat top left;
+    background: url('assets/img/redox_01_@2X.png') repeat top left;
   }
 
 }

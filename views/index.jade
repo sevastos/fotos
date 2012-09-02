@@ -1,0 +1,51 @@
+extends layout
+
+block content
+  header.clearfix
+    nav
+      ul
+        li
+          a(href="#") Φotos
+        li
+          input#photo-upload.trickbrowserhidden(
+            type="file"
+            accept="image/*"
+            tabindex="-1"
+            )
+          input#photo-upload-trigger.but.is-good(
+            type="button"
+            name="new"
+            value="New Photo"
+            )
+        li#gallery-info
+          input#load-gallery-trigger.but.is-good(
+            type="button"
+            name="new"
+            value="Load Gallery"
+            )
+        li
+          meter#space(
+            value="0"
+            min="0"
+            title="Space used"
+            )
+  section#item-list
+    div#photolist.photolist
+      article#intro
+        h1 Welcome to Φotos
+        p
+          | Here you can add "New Photos" and "Upload" them to the cloud (thanks to
+          | <a href="http://imgur.com">imgur.com</a>) and manage them from any
+          | device you chose without hassle.
+        p
+          | After you add and upload your first photo a 4 letter/digit code
+          | will appear on the navigation.
+        p
+          | You can use that code to load your gallery on other device and then
+          | take even more photos!
+        p Enjoy
+        p -Sev
+        p Notes:
+        p
+          | The meter on the top left is the space used on the browser for images
+          | (mostly thumbs)

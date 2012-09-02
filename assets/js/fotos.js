@@ -1,5 +1,9 @@
 // PHOTOLIST
 
+var IMGUR_API_KEY = '8a3f94c3ad388e5619dc949e094eba9f';
+var pl;
+
+
 /**
  * In charge if organizing the list of Photos
  * @param string|element element The element the PhotoList will be rendered inside
@@ -669,7 +673,7 @@ function Photo () {
 
     // Temp loading thumb
     var tmpImg = document.createElement('img');
-    tmpImg.src = 'spacer.gif';
+    tmpImg.src = '/assets/img/spacer.gif';
     return tmpImg;
   }
 
@@ -679,3 +683,32 @@ function Photo () {
   }
 
 }
+
+/**
+ * Synchronously execute this block
+ *
+ * @param  {jQuery} $ jQuery
+ * @return {void}
+ */
+(function($, window){
+    $('#photo-upload-trigger').click(function(e){
+        $('#photo-upload').click();
+    });
+
+    window.pl = new PhotoList('#photolist');
+
+    // IMAGE UPLOAD
+    var imageUpload = document.getElementById('photo-upload');
+
+    imageUpload.onchange = function (event) {
+        var files = event.target.files,
+            file;
+
+        if (files && files.length > 0) {
+            file = files[0];
+
+            var p = new Photo(file);
+            var index = pl.add(p);
+        }
+    }
+})(jQuery, this)

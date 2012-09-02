@@ -1,0 +1,45 @@
+{
+  "name": "fotos",
+  "version": "0.0.3",
+  "private": true,
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "3.0.0rc2",
+    "jade": "*",
+    "less-middleware": "*",
+    "grunt-closure-tools": "*"
+  },
+  "homepage": "https://github.com/sevastos/fotos",
+  "author":{
+      "name": "Sevastos Mastrogiorgis",
+      "url": "http://github.com/sevastos"
+  },
+
+  "contributors": [{
+      "name": "Thanasis Polychronakis",
+      "email": "thanpolas@gmail.com",
+      "url": "http://github.com/thanpolas"
+    }],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sevastos/fotos.git"
+  },
+  "bugs": {
+    "url": "https://github.com/sevastos/fotos/issues"
+  },
+  "licenses": [
+    {
+      "type": "APACHE2",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "engines": {
+    "node": "*"
+  },
+  "keywords": [
+    "fotos",
+    "mobile photos"
+  ]
+}
