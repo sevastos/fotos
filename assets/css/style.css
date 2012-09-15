@@ -89,11 +89,11 @@ header nav{
     (min-device-pixel-ratio: 1.5) {
 
   header nav{
-      background-image: url('assets/redox_01_@2X.png');
+      background-image: url('assets/images/redox_01_@2X.png');
   }
 
   body {
-    background: url('assets/redox_01_@2X.png') repeat top left;
+    background: url('assets/images/redox_01_@2X.png') repeat top left;
   }
 
 }
@@ -400,7 +400,7 @@ meter#space {
       }
     }
 
-    .photoitem img[src="spacer.gif"], .loading {
+    .photoitem img[src="assets/images/spacer.gif"], .loading {
       -moz-animation-name: loading;
       -moz-animation-duration: 1s;
       -moz-animation-iteration-count: infinite;
