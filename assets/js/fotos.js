@@ -669,7 +669,7 @@ function Photo () {
 
     // Temp loading thumb
     var tmpImg = document.createElement('img');
-    tmpImg.src = 'spacer.gif';
+    tmpImg.src = 'assets/images/spacer.gif';
     return tmpImg;
   }
 
