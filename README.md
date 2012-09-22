@@ -1,12 +1,12 @@
 Φotos
 =====
 
-Mozilla Dev Derby - Camera API - August 2012
+[**WINNER**](https://hacks.mozilla.org/2012/09/announcing-the-august-dev-derby-winners/) of Mozilla Dev Derby - Camera API - August 2012
 
 [Fotos entry page](https://developer.mozilla.org/en-US/demos/detail/otos)
 
 **TODO**
-- UX
+- Rethink UX
 - Handling offline
 - Better use of localStorage (use for offline)
 
