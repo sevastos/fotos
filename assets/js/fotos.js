@@ -63,13 +63,6 @@ function PhotoList (element) {
       this.list[index].delete();
       this.list.splice(index, 1);
 
-      $('[data-itemid]').each(function(i, el){
-        var ci = $(this).attr('data-itemid');
-        if ( ci > index ) {
-          $(this).attr('data-itemid', ci - 1);
-        }
-      });
-
       var el = document.querySelector('[data-itemid="'+index+'"]');
       el.style.opacity = 0.7;
       el.className += ' removing';
@@ -80,6 +73,13 @@ function PhotoList (element) {
           }
         }, 701, this.el, el, this
       );
+
+      $('[data-itemid]').each(function(i, el){
+        var ci = $(this).attr('data-itemid');
+        if ( ci > index ) {
+          $(this).attr('data-itemid', ci - 1);
+        }
+      });
       this.syncStorage();
 
     }
@@ -488,7 +488,7 @@ function Photo () {
     xhr.onload = function() {
       var res = JSON.parse(xhr.responseText);
       if (res.delete.message == 'Success') {
-        //console.log('Delete successfuly');
+        console.log('Delete successfuly');
       } else {
         console.log('Deleting went wrong');
         console.log(res);
