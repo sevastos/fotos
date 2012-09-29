@@ -1,13 +1,12 @@
 // PHOTOLIST
 
+
 /**
  * In charge if organizing the list of Photos
  * @param string|element element The element the PhotoList will be rendered inside
  */
 function PhotoList (element) {
-
-  this.list = [];
-  this.el;
+  "use strict";
 
   /**
    * Count the photos available
@@ -15,7 +14,7 @@ function PhotoList (element) {
    */
   this.count = function () {
     return this.list.length;
-  }
+  };
 
   /**
    * Add a Photo to the PhotoList
@@ -29,7 +28,7 @@ function PhotoList (element) {
     }
 
     // Hide intro
-    if (this.list.length == 0) {
+    if (this.list.length === 0) {
       document.getElementById('intro').style.display = 'none';
     }
 
@@ -43,7 +42,7 @@ function PhotoList (element) {
     this.setupItemEvents();
 
     return (this.list.length - 1);
-  }
+  };
 
   /**
    * Getter for Photos based on index
@@ -52,23 +51,23 @@ function PhotoList (element) {
    */
   this.get = function (index) {
     return this.list[index];
-  }
+  };
 
   /**
    * Delete a photo from the list
    * @param  integer index he index of the Photo to delete
    */
-  this.delete = function (index) {
+  this.del = function (index) {
     if ( typeof this.list[index] != 'undefined '){
-      this.list[index].delete();
+      this.list[index].del();
       this.list.splice(index, 1);
 
-      var el = document.querySelector('[data-itemid="'+index+'"]');
+      var el = document.querySelector('[data-itemid="' + index + '"]');
       el.style.opacity = 0.7;
       el.className += ' removing';
       setTimeout(function(parent, el, plist) {
           parent.removeChild(el);
-          if (plist.list.length == 0) {
+          if (plist.list.length === 0) {
             document.getElementById('intro').style.display = 'block';
           }
         }, 701, this.el, el, this
@@ -83,7 +82,7 @@ function PhotoList (element) {
       this.syncStorage();
 
     }
-  }
+  };
 
   /**
    * Upload photo. See @Photo.upload()
@@ -95,11 +94,11 @@ function PhotoList (element) {
     } else {
       console.log('Could not find and upload photo #' + index);
     }
-  }
+  };
 
   /**
    * Loads gallery data from the cloud database
-   * @param  integer webstorageId Optionally override localStorage['webstorageProxyId'] for the id
+   * @param  integer webstorageId Optionally override localStorage.webstorageProxyId for the id
    */
   this.getOnlineDb = function (webstorageId) {
     // Offline
@@ -107,11 +106,12 @@ function PhotoList (element) {
       return false;
     }
 
-    var idToUse;
+    var idToUse,
+        localStorage = window.localStorage;
     if ( typeof webstorageId != 'undefined' ) {
       idToUse = webstorageId;
-    } else if ( typeof localStorage['webstorageProxyId'] != 'undefined' ) {
-      idToUse = localStorage['webstorageProxyId'];
+    } else if ( typeof localStorage.webstorageProxyId != 'undefined' ) {
+      idToUse = localStorage.webstorageProxyId;
     } else {
       console.log('No Webstorage Id found locally');
       return false;
@@ -123,12 +123,12 @@ function PhotoList (element) {
     xhr.open("GET", "http://smas.gr/proj/fotos/cloudstorage.php?id=" + idToUse);
 
     xhr.onload = function() {
-      res = JSON.parse(xhr.responseText);
+      var res = JSON.parse(xhr.responseText);
 
       if ( res.response == 'success' ){
         try {
           $('#gallery-info').html('Gallery code: <strong>'+idToUse+'</strong>');
-          localStorage['webstorageProxyId'] = idToUse;
+          localStorage.webstorageProxyId = idToUse;
           localStorage.setItem('photoList', res.data);
           thisPhotoList.init(thisPhotoList.el);
         } catch (e) {
@@ -142,10 +142,10 @@ function PhotoList (element) {
           alert('The code you typed looks like to be from the future, no photos there (yet)');
         }
       }
-    }
+    };
 
     xhr.send();
-  }
+  };
 
   /**
    * Update the cloud database with the local gallery data
@@ -156,20 +156,21 @@ function PhotoList (element) {
       return false;
     }
 
-    var xhr = new XMLHttpRequest();
-    var url = 'http://smas.gr/proj/fotos/cloudstorage.php';
+    var xhr = new XMLHttpRequest(),
+        url = 'http://smas.gr/proj/fotos/cloudstorage.php',
+        localStorage = window.localStorage;
 
     // Update, otherwise a key will be generated on the serverside
-    if( typeof localStorage['webstorageProxyId'] != 'undefined' ) {
-      url += '?id=' + localStorage['webstorageProxyId'];
+    if( typeof localStorage.webstorageProxyId != 'undefined' ) {
+      url += '?id=' + localStorage.webstorageProxyId;
     }
 
     xhr.open("POST", url);
     xhr.onload = function() {
-      res = JSON.parse(xhr.responseText);
+      var res = JSON.parse(xhr.responseText);
       try {
         if ( res.response == 'success' ) {
-          localStorage['webstorageProxyId'] = res.id;
+          localStorage.webstorageProxyId = res.id;
           $('#gallery-info').html('Gallery code: <strong>'+res.id+'</strong>');
         } else {
           //console.log('Save failed for some reason');
@@ -178,18 +179,19 @@ function PhotoList (element) {
         console.log('Unexpected error from proxy saver:');
         console.log(res);
       }
-    }
+    };
 
+    // TOCO: Incompatibility of FormData (XHR2) with IE < 10
     var fd = new FormData();
     fd.append("data", JSON.stringify(this.list));
     xhr.send(fd);
-  }
+  };
 
   /**
    * Sync PhotoList with localStorage
    */
   this.syncStorage = function () {
-    if ('localStorage' in window && window['localStorage'] != null) {
+    if ('localStorage' in window && window.localStorage !== null) {
       // sync localStorage
       try {
         localStorage.setItem('photoList', JSON.stringify(this.list));
@@ -207,7 +209,7 @@ function PhotoList (element) {
         //alert('Unfortunately probably there is no space for more photos, try deleting one');
       }
     }
-  }
+  };
 
   /**
    * Update the storage meter
@@ -221,15 +223,15 @@ function PhotoList (element) {
         el.setAttribute('low', maxSpace * 0.4);
         el.setAttribute('high', maxSpace * 0.8);
         el.setAttribute('optimum', 1);
-  }
+  };
 
   /**
    * Get the used storage by localStorage
    * @return integer Used local storage in bytes
    */
   this.getUsedStorage = function () {
-    return unescape(encodeURIComponent(JSON.stringify(localStorage))).length
-  }
+    return unescape(encodeURIComponent(JSON.stringify(localStorage))).length;
+  };
 
   /**
    * Get the remaining storage by localStorage
@@ -243,7 +245,7 @@ function PhotoList (element) {
       // BADLY imply 5 MB of max size
       return 5 * 1024 * 1024 - this.getUsedStorage();
     }
-  }
+  };
 
   /**
    * Get the max storage of localStorage
@@ -251,7 +253,7 @@ function PhotoList (element) {
    */
   this.getMaxStorage = function () {
     return this.getRemainingStorage() + this.getUsedStorage();
-  }
+  };
 
   // VIEW of PhotoList
   this.renderList = function () {
@@ -265,14 +267,14 @@ function PhotoList (element) {
       html = itemEl.outerHTML + html;
     }
     return html;
-  }
+  };
 
   this.showList = function () {
     var intro = document.getElementById('intro');
     intro.style.display = 'none';
     this.el.innerHTML = this.renderList() + intro.outerHTML;
     this.setupItemEvents();
-  }
+  };
 
   this.setupItemEvents = function () {
     var that = this;
@@ -285,7 +287,7 @@ function PhotoList (element) {
       if(e.keyCode == 9) return; //TAB
       var sure = confirm('Are you sure you want to delete this photo?');
       if ( sure ) {
-        that.delete($(this).closest('[data-itemid]').attr('data-itemid'));
+        that.del($(this).closest('[data-itemid]').attr('data-itemid'));
       }
     });
 
@@ -318,12 +320,12 @@ function PhotoList (element) {
     var thatPhotoList = this;
     $('#gallery-info input').on('click', function(e){
       var id = prompt('Please enter your 4 letter/digit gallery code:');
-      if (id != null) {
+      if (id !== null) {
         $(this).prop('disabled', 'disabled');
         thatPhotoList.getOnlineDb(id);
       }
     });
-  }
+  };
 
   this.onPhotoRefresh = function (e, thatPhotoList) {
     var i;
@@ -347,16 +349,16 @@ function PhotoList (element) {
           });
 
       $('a[data-itemid="' + i + '"] input')
-        .prop('disabled', '')
+        .prop('disabled', '');
     }
 
     this.syncStorage();
-  }
+  };
 
   // INIT
   this.init = function (element) {
     // Check support
-    if (!'localStorage' in window || window['localStorage'] == null) {
+    if (!('localStorage' in window || window.localStorage === null)) {
       alert('Sorry but this demo requires localStorage to work. Please upgrade.');
     }
 
@@ -368,7 +370,7 @@ function PhotoList (element) {
 
     // Sync localStorage
     var savedPhotoList = localStorage.getItem('photoList');
-    if ( savedPhotoList != null ) {
+    if ( savedPhotoList !== null ) {
       this.list = JSON.parse(savedPhotoList);
       // Mark previously added photos
       for ( var i in this.list ) {
@@ -389,16 +391,17 @@ function PhotoList (element) {
     }, true);
 
     this.updateStorageMeter();
-  }
+  };
 
   // PhotoList presentation setup
+  this.list = [];
   this.el = typeof element == 'string' ? document.querySelector(element) : element;
 
   // If previously used online db check for changes
   var urlId = decodeURI((RegExp('id' + '=' + '(.+?)(&|$)').exec(location.search)||[,null])[1]);
-  if( urlId != 'null' && urlId != null ){
+  if( urlId != 'null' && urlId !== null ){
     this.getOnlineDb(urlId);
-  } else if( typeof localStorage['webstorageProxyId'] != 'undefined' ) {
+  } else if( typeof localStorage.webstorageProxyId != 'undefined' ) {
     this.getOnlineDb();
   } else {
     this.init(element);
@@ -409,6 +412,7 @@ function PhotoList (element) {
 
 // PHOTO
 function Photo () {
+  "use strict";
 
   this.THUMB_WIDTH = 100;
   this.THUMB_HEIGHT = 100;
@@ -430,7 +434,7 @@ function Photo () {
     if (typeof file.imgur != 'undefined'){
       this.imgur = file.imgur;
     }
-  }
+  };
 
   /**
    * Upload (to imgur.com)
@@ -450,12 +454,12 @@ function Photo () {
     var xhr = new XMLHttpRequest();
     xhr.open("POST", "http://api.imgur.com/2/upload.json");
     xhr.onload = function() {
-      res = JSON.parse(xhr.responseText);
+      var res = JSON.parse(xhr.responseText);
 
       thisPhoto.imgur = {
         full : res.upload.image.original,
         hash : res.upload.image.hash,
-        deleteHash : res.upload.image.deletehash,
+        deleteHash : res.upload.image.deletehash
       };
 
       // force update on image to use the new thumb
@@ -464,19 +468,19 @@ function Photo () {
       thisPhoto.isUploaded= true;
 
       thisPhoto.dispatchChange('uploaded');
-    }
+    };
 
     var fd = new FormData();
     fd.append("image", fileToSend);
     fd.append("key", IMGUR_API_KEY);
     xhr.send(fd);
-  }
+  };
 
   /**
    * Delete from imgur
    */
-  this.delete = function () {
-    $(this).closest('[data-itemid]').attr('data-itemid')
+  this.del = function () {
+    $(this).closest('[data-itemid]').attr('data-itemid');
 
     if ( typeof this.imgur == 'undefined' ) {
       return -1; // No imgur data
@@ -487,18 +491,18 @@ function Photo () {
     xhr.open("GET", "http://api.imgur.com/2/delete/" + this.imgur.deleteHash + ".json"); // Boooom!
     xhr.onload = function() {
       var res = JSON.parse(xhr.responseText);
-      if (res.delete.message == 'Success') {
+      if (res['delete'].message == 'Success') {
         console.log('Delete successfuly');
       } else {
         console.log('Deleting went wrong');
         console.log(res);
       }
-    }
+    };
 
     var fd = new FormData();
     fd.append("key", IMGUR_API_KEY);
     xhr.send(fd);
-  }
+  };
 
   this.dispatchChange = function (info) {
     var evt = document.createEvent('Event');
@@ -509,7 +513,7 @@ function Photo () {
     }
     evt.info = info;
     document.dispatchEvent(evt);
-  }
+  };
 
   this.fullViewItem = function () {
     var fullView = $('<div>')
@@ -521,7 +525,7 @@ function Photo () {
       $(this).remove();
     });
     $('body').append(fullView);
-  }
+  };
 
   this.presentItem = function () {
     var img = document.createElement('img');
@@ -564,7 +568,7 @@ function Photo () {
     a.appendChild(theImg);
 
     return a;
-  }
+  };
 
   /**
    * Filesize to formatted string
@@ -577,7 +581,7 @@ function Photo () {
     size = Math.round(size * 100 ) / 100;
 
     return size + ' ' + factor;
-  }
+  };
 
   /**
    * Resize an image
@@ -587,10 +591,10 @@ function Photo () {
    * @return string         A base64 encoded string of the resized image
    */
   this.generateThumb = function (element, width, height) {
-    var el = (typeof element == 'string' ? document.querySelector(element) : element);
+    var el = (typeof element === 'string' ? document.querySelector(element) : element);
 
     // Previously generated thumb
-    if ( this.thumbData != null ) {
+    if ( this.thumbData !== null ) {
       el.setAttribute('src', this.thumbData);
       //TODE
       //thatPhoto.dispatchChange();
@@ -671,7 +675,7 @@ function Photo () {
     var tmpImg = document.createElement('img');
     tmpImg.src = 'assets/images/spacer.gif';
     return tmpImg;
-  }
+  };
 
   // Init
   if ( arguments.length == 1 || arguments[0] instanceof File ) {
